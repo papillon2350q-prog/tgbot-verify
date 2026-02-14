@@ -98,12 +98,4 @@ jobs:
           sleep 15  # Espera para que inicie
           docker compose logs --tail=50  # Muestra últimos logs
           docker compose down  # Detiene después del test
-
-          - name: Deploy to Railway
-        if: ${{ github.event_name == 'workflow_dispatch' }}  # Solo en manual
-        uses: bervProject/railway-deploy@v1.2.3
-        with:
-          railway_api_token: ${{ secrets.RAILWAY_API_TOKEN }}  # Agrega este secret en GitHub (obtén token en Railway settings)
-          project_id: tu-project-id-en-railway
-
-
+          
