@@ -1,0 +1,34 @@
+name: Build and Deploy Telegram Bot
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Permite ejecución manual desde GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'  # Versión requerida por el repo
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium  # Instala Chromium para Playwright
+
+      - name: Generate .env from secrets
+        run: |
+          cat <<EOF > .env
+          BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+          ADMIN_USER_ID=${{ secrets.ADMIN_USER_ID }}
+          MYSQL_HOST=${{ secrets.MYSQL_HOST || 'localhost' }}
+          MYSQL_USER=${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE=${{ secrets
